@@ -25,7 +25,8 @@ def getFatPercentage(experiment_mode, disease_class, is_male):
             else:
                 return np.random.normal(loc=36.4, scale=9.7)
     
-    elif experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
+    # elif experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
+    else:
         # Obesity is a causal factor of this disease
         if disease_class == 'DCM':
             return np.random.normal(loc=33, scale=9) 
@@ -94,14 +95,13 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
     # Establish size multiplier
     if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
         size_multiplier = 1
-    elif experiment_mode == EXPERIMENT_MODE.different_size_male_female.value:
+    # elif experiment_mode == EXPERIMENT_MODE.different_size_male_female.value:
+    else:
         if is_male:
             size_multiplier = np.random.normal(loc=1.3, scale=0.15)
         else:
             size_multiplier = np.random.normal(loc=1, scale=0.15)
 
-    else:
-        size_multiplier = 1
     # Heart measurements: disease and size dependant
     RV_wall_thickness, RV_radius, LV_wall_thickness, LV_radius = getHeartSizeParams(disease_class, size_multiplier)
   
@@ -147,10 +147,10 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
     # Establish fat offset - reason for differing fat_offsets is explained in 'Notes on EXPERIMENT_MODE = 2' in MRIDetails.py
     if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
         fat_offset_from_LV_radius = 18
-    elif experiment_mode == EXPERIMENT_MODE.different_size_male_female.value:
-        fat_offset_from_LV_radius = 10
+    # elif experiment_mode == EXPERIMENT_MODE.different_size_male_female.value:
     else:
-        fat_offset = 10
+        fat_offset_from_LV_radius = 10
+
 
     # Heart dimensions will depend on heart disease 
     # However, I am assuming that ...
