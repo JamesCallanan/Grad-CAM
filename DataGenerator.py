@@ -76,7 +76,7 @@ def getHeartSizeParams(disease_class, size_multiplier):
 
 
 
-def make_mri_and_seg_mask(experiment_mode, disease_class):
+def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri_width = 135):
     fatty_LV = False
     is_male = isMale(disease_details[disease_class]['percentage_male'])
 
@@ -226,11 +226,7 @@ def make_mri_and_seg_mask(experiment_mode, disease_class):
     cardiac_mri[ xmin:xmax, ymin:ymax ] = fat_image[xmin:xmax,ymin:ymax]
     seg_mask[ xmin:xmax, ymin:ymax ] = SEG_MASK_KEYS.fat.value
 
-    # Centering cardiac_mri and seg_mask in larger np arrays
-
-    # Dimensions for larger np array that above arrays will be centred in
-    mri_height = 100
-    mri_width = 130
+    # Centering cardiac_mri and seg_mask in larger np arrays 
 
     # Creating larger arrays
     centred_mri = np.zeros( ( mri_height, mri_width ) , dtype=np.uint8)
