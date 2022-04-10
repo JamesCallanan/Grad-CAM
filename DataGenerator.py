@@ -247,5 +247,15 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
         if is_male:
             centred_mri[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = MRI_SEGMENT_COLOURS.is_male.value
             centred_seg_mask[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = SEG_MASK_KEYS.is_male.value
-
+    if experiment_mode == EXPERIMENT_MODE.extreme_diffs.value:
+        box_width = 20
+        if disease_class == 'RV':
+            centred_mri[ mri_height - box_width : mri_height - 1, mri_width - box_width : mri_width - 1] = MRI_SEGMENT_COLOURS.is_male.value
+        if disease_class == 'NOR':
+            centred_mri[ 0 : box_width, mri_width - box_width : mri_width - 1] = MRI_SEGMENT_COLOURS.is_male.value
+        if disease_class == 'HCM':
+            centred_mri[ mri_height - box_width : mri_height - 1, 0 : box_width] = MRI_SEGMENT_COLOURS.is_male.value
+        if disease_class == 'DCM':
+            centred_mri[ 0 : box_width, 0 : box_width] = MRI_SEGMENT_COLOURS.is_male.value
+    
     return centred_mri, centred_seg_mask

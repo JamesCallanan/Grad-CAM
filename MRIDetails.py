@@ -21,7 +21,7 @@ from enum import Enum
 class EXPERIMENT_MODE(Enum):
     same_size_male_female = 0
     different_size_male_female = 1
-
+    extreme_diffs = 2
 
 class MRI_SEGMENT_COLOURS(Enum):
     fat = 0.9*255
