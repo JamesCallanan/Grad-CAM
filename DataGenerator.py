@@ -100,7 +100,8 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
         else:
             size_multiplier = np.random.normal(loc=1, scale=0.15)
 
-
+    else:
+        size_multiplier = 1
     # Heart measurements: disease and size dependant
     RV_wall_thickness, RV_radius, LV_wall_thickness, LV_radius = getHeartSizeParams(disease_class, size_multiplier)
   
@@ -148,6 +149,8 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
         fat_offset_from_LV_radius = 18
     elif experiment_mode == EXPERIMENT_MODE.different_size_male_female.value:
         fat_offset_from_LV_radius = 10
+    else:
+        fat_offset = 10
 
     # Heart dimensions will depend on heart disease 
     # However, I am assuming that ...
@@ -247,6 +250,7 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
         if is_male:
             centred_mri[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = MRI_SEGMENT_COLOURS.is_male.value
             centred_seg_mask[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = SEG_MASK_KEYS.is_male.value
+    
     if experiment_mode == EXPERIMENT_MODE.extreme_diffs.value:
         box_width = 20
         if disease_class == 'RV':
