@@ -6,6 +6,9 @@ import matplotlib.cm as cm
 
 
 def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+    if np.mean(img_array) > 0:
+        print('Mean of image was > 0 . Are you sure that you are passing in preprocessed images!! Preproccessing images is needed for pre-trained model to perform well')
+
     # Check image dimensions are okay - image dimensions must match form that network will accept + batch size must equal 1
     if img_array.shape[0] > 1:
       return 'Error with make_gradcam_heatmap()!\nBatch size for img_array parameter is greater than 1.\nGrad-CAM can only be applied to individual images.\nThis fn would pool gradients over multiple images and give incorrect results.'
@@ -40,6 +43,9 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     return grad_cam_heatmap.numpy(), hi_res_cam_heatmap.numpy()
 
 def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
+    if np.mean(mri) < 0:
+        print('Mean of image was < 0 . Are you sure that you are passing in unprocessed images!! Preproccessing applied for network is not good for network visualisations')
+
     if len(mri.shape) != 3:
       return 'Incorrect length mri'
     mri = (255*(mri/np.amax(mri)))
@@ -63,3 +69,4 @@ def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
     superimposed_img = jet_heatmap*alpha +  mri*beta
     superimposed_img = superimposed_img.astype(int)
     plt.imshow(superimposed_img)
+    plt.show()
