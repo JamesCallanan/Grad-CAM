@@ -24,10 +24,10 @@ class EXPERIMENT_MODE(Enum):
     extreme_diffs = 2
 
 class MRI_SEGMENT_COLOURS(Enum):
-    fat = 0.9
-    ventricle_cavity = 0.8
-    myocardium = 0.2
-    is_male = 0.9
+    fat = 0.9*255
+    ventricle_cavity = 0.8*255
+    myocardium = 0.2*255
+    is_male = 1*255
 
 class SEG_MASK_KEYS(Enum):
     LV_cavity = 1
