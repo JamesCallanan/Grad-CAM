@@ -269,28 +269,28 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
 
 def make_MRI_dataset(dataset_size, DISEASE_LABELS, experiment_mode):
     disease_classes = list(DISEASE_LABELS._member_map_.keys())
-    same_size_mris_unprocessed, seg_masks, labels = list(), list(), list()
+    mris_unprocessed, seg_masks, labels = list(), list(), list()
 
     for disease in disease_classes:
         label = DISEASE_LABELS[disease].value
 
         for i in range(int(dataset_size/len(disease_classes))):
             mri, seg_mask = make_mri_and_seg_mask( experiment_mode = experiment_mode , disease_class = disease)
-            same_size_mris_unprocessed.append(mri)
+            mris_unprocessed.append(mri)
             seg_masks.append(seg_mask)
             labels.append(label)
 
-    same_size_mris_unprocessed = np.asarray(same_size_mris_unprocessed)
-    same_size_mris_unprocessed = np.expand_dims(same_size_mris_unprocessed,-1)  # adding color channel
-    same_size_mris_unprocessed = same_size_mris_unprocessed.repeat(3,-1)        # making 3 RGB channels
-    same_size_mris_preprocessed = tf.keras.applications.mobilenet.preprocess_input(same_size_mris_unprocessed) #preprocessing for use with pre-trained VGG model
+    mris_unprocessed = np.asarray(mris_unprocessed)
+    mris_unprocessed = np.expand_dims(mris_unprocessed,-1)  # adding color channel
+    mris_unprocessed = mris_unprocessed.repeat(3,-1)        # making 3 RGB channels
+    mris_preprocessed = tf.keras.applications.mobilenet.preprocess_input(mris_unprocessed) #preprocessing for use with pre-trained VGG model
     seg_masks = np.asarray(seg_masks)
     # seg_masks = np.expand_dims(seg_masks,-1)
     labels = np.asarray(labels)
 
     return {
-        'same_size_mris_unprocessed' : same_size_mris_unprocessed, 
-        'same_size_mris_preprocessed' : same_size_mris_preprocessed, 
+        'mris_unprocessed' : mris_unprocessed, 
+        'mris_preprocessed' : mris_preprocessed, 
         'seg_masks' : seg_masks, 
         'labels' : labels
     }
