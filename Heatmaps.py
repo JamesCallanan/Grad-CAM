@@ -50,9 +50,14 @@ def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
 
     # Create an image with RGB colorized heatmap
     jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
+    print('max', np.amax(jet_heatmap))
+    print('min', np.amin(jet_heatmap))
+    print('mean', np.mean(jet_heatmap))
     jet_heatmap = jet_heatmap.resize((mri.shape[1], mri.shape[0]))
     jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
-    print(jet_heatmap[0,0,:])
+    print('max', np.amax(jet_heatmap))
+    print('min', np.amin(jet_heatmap))
+    print('mean', np.mean(jet_heatmap))
 
     # Superimpose the heatmap on original image
     superimposed_img = jet_heatmap*alpha +  mri*beta
