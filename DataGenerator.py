@@ -1,4 +1,6 @@
 import numpy as np
+from enum import Enum
+import tensorflow as tf
 import skimage.draw
 import random
 from MRIDetails import disease_details, MRI_SEGMENT_COLOURS, SEG_MASK_KEYS, EXPERIMENT_MODE
@@ -263,3 +265,32 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
             centred_mri[ 0 : box_width, 0 : box_width] = MRI_SEGMENT_COLOURS.is_male.value
     
     return centred_mri, centred_seg_mask
+
+
+def make_MRI_dataset(dataset_size, DISEASE_LABELS, experiment_mode):
+    disease_classes = list(DISEASE_LABELS._member_map_.keys())
+    same_size_mris_unprocessed, seg_masks, labels = list(), list(), list()
+
+    for disease in disease_classes:
+        label = DISEASE_LABELS[disease].value
+
+        for i in range(int(dataset_size/len(disease_classes))):
+            mri, seg_mask = make_mri_and_seg_mask( experiment_mode = experiment_mode , disease_class = disease)
+            same_size_mris_unprocessed.append(mri)
+            seg_masks.append(seg_mask)
+            labels.append(label)
+
+    same_size_mris_unprocessed = np.asarray(same_size_mris_unprocessed)
+    same_size_mris_unprocessed = np.expand_dims(same_size_mris_unprocessed,-1)  # adding color channel
+    same_size_mris_unprocessed = same_size_mris_unprocessed.repeat(3,-1)        # making 3 RGB channels
+    same_size_mris_preprocessed = tf.keras.applications.mobilenet.preprocess_input(same_size_mris_unprocessed) #preprocessing for use with pre-trained VGG model
+    seg_masks = np.asarray(seg_masks)
+    # seg_masks = np.expand_dims(seg_masks,-1)
+    labels = np.asarray(labels)
+
+    return {
+        'same_size_mris_unprocessed' : same_size_mris_unprocessed, 
+        'same_size_mris_preprocessed' : same_size_mris_preprocessed, 
+        'seg_masks' : seg_masks, 
+        'labels' : labels
+    }
