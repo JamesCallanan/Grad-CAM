@@ -24,15 +24,27 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
         class_channel = preds[:, pred_index]
 
     grads = tape.gradient(class_channel, last_conv_layer_output)
+    last_conv_layer_output = last_conv_layer_output[0]
 
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+    
+    grad_cam_heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+    print('grad_cam_heatmap',grad_cam_heatmap.shape)
+    grad_cam_heatmap = tf.squeeze(grad_cam_heatmap)
+    print('grad_cam_heatmap',grad_cam_heatmap.shape)#relu because of the maximum operation and normalised because of division by max
+    
+    grad_cam_heatmap = tf.maximum(grad_cam_heatmap, 0) / tf.math.reduce_max(grad_cam_heatmap)
+    print('grad_cam_heatmap',grad_cam_heatmap.shape)
+    #HiResCAM
+    
+    hi_res_cam_heatmap = tf.math.multiply(last_conv_layer_output,grads[0])
+    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
+    hi_res_cam_heatmap = tf.reduce_mean(hi_res_cam_heatmap,-1)
+    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
+    hi_res_cam_heatmap = tf.maximum(hi_res_cam_heatmap, 0) / tf.math.reduce_max(hi_res_cam_heatmap)
+    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
 
-    last_conv_layer_output = last_conv_layer_output[0]
-    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
-    heatmap = tf.squeeze(heatmap)
-    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
-
-    return heatmap.numpy()
+    return grad_cam_heatmap.numpy(), hi_res_cam_heatmap.numpy()
 
 def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
     if len(mri.shape) != 3:
@@ -50,14 +62,9 @@ def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
 
     # Create an image with RGB colorized heatmap
     jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
-    print('max', np.amax(jet_heatmap))
-    print('min', np.amin(jet_heatmap))
-    print('mean', np.mean(jet_heatmap))
+
     jet_heatmap = jet_heatmap.resize((mri.shape[1], mri.shape[0]))
     jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
-    print('max', np.amax(jet_heatmap))
-    print('min', np.amin(jet_heatmap))
-    print('mean', np.mean(jet_heatmap))
 
     # Superimpose the heatmap on original image
     superimposed_img = jet_heatmap*alpha +  mri*beta
