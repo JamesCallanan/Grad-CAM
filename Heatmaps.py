@@ -28,21 +28,14 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
 
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
     
-    grad_cam_heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
-    print('grad_cam_heatmap',grad_cam_heatmap.shape)
+    grad_cam_heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis] #@operator will do a matrix multiplication and 512 feature map axis will dissapear
     grad_cam_heatmap = tf.squeeze(grad_cam_heatmap)
-    print('grad_cam_heatmap',grad_cam_heatmap.shape)#relu because of the maximum operation and normalised because of division by max
-    
     grad_cam_heatmap = tf.maximum(grad_cam_heatmap, 0) / tf.math.reduce_max(grad_cam_heatmap)
-    print('grad_cam_heatmap',grad_cam_heatmap.shape)
-    #HiResCAM
     
+    #HiResCAM
     hi_res_cam_heatmap = tf.math.multiply(last_conv_layer_output,grads[0])
-    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
-    hi_res_cam_heatmap = tf.reduce_mean(hi_res_cam_heatmap,-1)
-    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
+    hi_res_cam_heatmap = tf.reduce_mean(hi_res_cam_heatmap,-1) #Needed to average over different feature map layers
     hi_res_cam_heatmap = tf.maximum(hi_res_cam_heatmap, 0) / tf.math.reduce_max(hi_res_cam_heatmap)
-    print('hi_res_cam_heatmap',hi_res_cam_heatmap.shape)
 
     return grad_cam_heatmap.numpy(), hi_res_cam_heatmap.numpy()
 
