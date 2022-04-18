@@ -97,3 +97,30 @@ class DISEASE_LABELS(Enum):
   HCM = [0,1,0,0]
   DCM = [0,0,1,0]
   RV = [0,0,0,1]
+    
+ def get_segment_seg_maps(seg_mask):
+    lv_cavity = seg_mask == SEG_MASK_KEYS.LV_cavity.value
+    rv_cavity = seg_mask == SEG_MASK_KEYS.RV_cavity.value
+    lv_myo    = seg_mask == SEG_MASK_KEYS.LV_myocardium.value
+    rv_myo    = seg_mask == SEG_MASK_KEYS.RV_myocardium.value
+    fat       = seg_mask == SEG_MASK_KEYS.fat.value
+    is_male   = seg_mask == SEG_MASK_KEYS.is_male.value
+
+    lv = np.logical_or(lv_cavity, lv_myo)
+    rv = np.logical_or(rv_cavity, rv_myo)
+
+    heart = np.logical_or(lv,rv)
+
+    segment_seg_masks = {
+        'heart' : heart,
+        'not_heart' : np.logical_not(heart),
+        'lv' : lv,
+        'rv' : rv,
+        'is_male' : is_male,
+        'fat' : fat,
+        'lv_cavity' : lv_cavity,
+        'rv_cavity' : rv_cavity,
+        'lv_myo' : lv_myo,
+        'rv_myo ' : rv_myo 
+    }
+    return segment_seg_masks
