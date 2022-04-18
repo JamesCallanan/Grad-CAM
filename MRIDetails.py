@@ -91,3 +91,9 @@ disease_details = {
         'percentage_male': 2.7/3.7
     }
 }
+
+class DISEASE_LABELS(Enum):
+  NOR = [1,0,0,0]
+  HCM = [0,1,0,0]
+  DCM = [0,0,1,0]
+  RV = [0,0,0,1]
