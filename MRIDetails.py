@@ -29,13 +29,14 @@ class MRI_SEGMENT_COLOURS(Enum):
     myocardium = 0.2*255
     is_male = 1*255
 
+# Chosen so they don't overlap with class labels 0,1,2,3
 class SEG_MASK_KEYS(Enum):
-    LV_cavity = 1
-    RV_cavity = 2
-    LV_myocardium = 3
-    RV_myocardium = 4
-    fat = 5
-    is_male = 6
+    LV_cavity = 11
+    RV_cavity = 12
+    LV_myocardium = 13
+    RV_myocardium = 14
+    fat = 15
+    is_male = 16
 
 NOR_heart_ratios = {
     'RV_radius' : 2.5/17,
