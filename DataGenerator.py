@@ -273,12 +273,20 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
 def make_MRI_dataset(dataset_size, DISEASE_LABELS, experiment_mode):
     disease_classes = list(DISEASE_LABELS._member_map_.keys())
     mris_unprocessed, seg_masks, labels = list(), list(), list()
-
+    
+    if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
+        mris_no_sex_labels_unprocessed = list()
+        
     for disease in disease_classes:
         label = DISEASE_LABELS[disease].value
 
         for i in range(int(dataset_size/len(disease_classes))):
-            mri, seg_mask = make_mri_and_seg_mask( experiment_mode = experiment_mode , disease_class = disease)
+            if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
+              mri, seg_mask, mris_no_sex_label = make_mri_and_seg_mask( experiment_mode = experiment_mode , disease_class = disease)
+              mris_no_sex_labels_unprocessed.append(mris_no_sex_label)
+            else:
+              mri, seg_mask = make_mri_and_seg_mask( experiment_mode = experiment_mode , disease_class = disease)
+ 
             mris_unprocessed.append(mri)
             seg_masks.append(seg_mask)
             labels.append(label)
@@ -287,13 +295,30 @@ def make_MRI_dataset(dataset_size, DISEASE_LABELS, experiment_mode):
     mris_unprocessed = np.expand_dims(mris_unprocessed,-1)  # adding color channel
     mris_unprocessed = mris_unprocessed.repeat(3,-1)        # making 3 RGB channels
     mris_preprocessed = tf.keras.applications.mobilenet.preprocess_input(mris_unprocessed) #preprocessing for use with pre-trained VGG model
+   
     seg_masks = np.asarray(seg_masks)
     # seg_masks = np.expand_dims(seg_masks,-1)
     labels = np.asarray(labels)
+    
+    if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
+        mris_no_sex_labels_unprocessed = np.asarray(mris_no_sex_labels_unprocessed)
+        mris_no_sex_labels_unprocessed = np.expand_dims(mris_no_sex_labels_unprocessed,-1)  # adding color channel
+        mris_no_sex_labels_unprocessed = mris_no_sex_labels_unprocessed.repeat(3,-1)        # making 3 RGB channels
+        mris_no_sex_labels_preprocessed = tf.keras.applications.mobilenet.preprocess_input(mris_no_sex_labels_unprocessed) #preprocessing for use with pre-trained VGG model
 
-    return {
-        'mris_unprocessed' : mris_unprocessed, 
-        'mris_preprocessed' : mris_preprocessed, 
-        'seg_masks' : seg_masks, 
-        'labels' : labels
-    }
+        return {
+          'mris_unprocessed' : mris_unprocessed, 
+          'mris_preprocessed' : mris_preprocessed,           
+          'mris_no_sex_labels_unprocessed' : mris_no_sex_labels_unprocessed, 
+          'mris_no_sex_labels_preprocessed' : mris_no_sex_labels_preprocessed,  
+          'seg_masks' : seg_masks, 
+          'labels' : labels
+        }
+  
+    else:
+        return {
+            'mris_unprocessed' : mris_unprocessed, 
+            'mris_preprocessed' : mris_preprocessed, 
+            'seg_masks' : seg_masks, 
+            'labels' : labels
+        }
