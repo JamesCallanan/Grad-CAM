@@ -249,9 +249,12 @@ def make_mri_and_seg_mask(experiment_mode, disease_class, mri_height = 105 , mri
     # Add male identifier id performing experiment 2 - see explanation in 'Notes on EXPERIMENT_MODE = 2' in MRIDetails.py
     if experiment_mode == EXPERIMENT_MODE.same_size_male_female.value:
         male_identifier_box_width = 10
+        centred_mri_no_sex_identifiers = centred_mri
         if is_male:
             centred_mri[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = MRI_SEGMENT_COLOURS.is_male.value
             centred_seg_mask[ mri_height - male_identifier_box_width : mri_height - 1, mri_width - male_identifier_box_width : mri_width - 1] = SEG_MASK_KEYS.is_male.value
+        
+        return centred_mri, centred_seg_mask, centred_mri_no_sex_identifiers
     
     if experiment_mode == EXPERIMENT_MODE.extreme_diffs.value:
         box_width = 20
