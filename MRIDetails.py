@@ -93,12 +93,12 @@ disease_details = {
 }
 
 class DISEASE_LABELS(Enum):
-  NOR = [1,0,0,0]
-  HCM = [0,1,0,0]
-  DCM = [0,0,1,0]
-  RV = [0,0,0,1]
+    NOR = [1,0,0,0]
+    HCM = [0,1,0,0]
+    DCM = [0,0,1,0]
+    RV = [0,0,0,1]
     
- def get_segment_seg_maps(seg_mask):
+def get_segment_seg_maps(seg_mask):
     lv_cavity = seg_mask == SEG_MASK_KEYS.LV_cavity.value
     rv_cavity = seg_mask == SEG_MASK_KEYS.RV_cavity.value
     lv_myo    = seg_mask == SEG_MASK_KEYS.LV_myocardium.value
