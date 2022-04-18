@@ -1,3 +1,4 @@
+import numpy as np
 from enum import Enum
 
 # Notes on EXPERIMENT_MODE = 2
