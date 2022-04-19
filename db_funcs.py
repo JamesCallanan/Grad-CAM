@@ -64,7 +64,7 @@ def insert_trial(trial, database_connection_details):
                             val_loss,
                             val_acc,
                             train_loss,
-                            train_acc,
+                            train_acc
                           )
                           VALUES (%s,%s,%s,%s,%s,%s,%s)
                           ON CONFLICT DO NOTHING
@@ -76,7 +76,7 @@ def insert_trial(trial, database_connection_details):
                           trial['val_loss'],
                           trial['val_acc'],
                           trial['train_loss'],
-                          trial['train_acc'],
+                          trial['train_acc']
                         )
                       )
     conn.close()
