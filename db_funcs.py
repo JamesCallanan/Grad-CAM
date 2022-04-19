@@ -67,7 +67,7 @@ def insert_trial(trial, database_connection_details):
                             train_acc,
                             learning_rate
                           )
-                          VALUES (%s,%s,%s,%s,%s,%s,%s)
+                          VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                           ON CONFLICT DO NOTHING
                         """,
                         (
