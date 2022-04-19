@@ -64,7 +64,8 @@ def insert_trial(trial, database_connection_details):
                             val_loss,
                             val_acc,
                             train_loss,
-                            train_acc
+                            train_acc,
+                            learning_rate
                           )
                           VALUES (%s,%s,%s,%s,%s,%s,%s)
                           ON CONFLICT DO NOTHING
@@ -76,7 +77,8 @@ def insert_trial(trial, database_connection_details):
                           trial['val_loss'],
                           trial['val_acc'],
                           trial['train_loss'],
-                          trial['train_acc']
+                          trial['train_acc'],
+                          trial['learning_rate']
                         )
                       )
     conn.close()
@@ -164,6 +166,7 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
                           avg_fraction_of_heatmap_in_male_labels,
                           avg_heart_in_mris,
                           avg_fraction_of_heatmap_in_heart
+                          learning_rate
                         FROM trials_new
                         INNER JOIN search ON trials_new.search_id = search.search_id
                         WHERE trials_new.trial_uid = %s""", (trial_uid,)
@@ -194,7 +197,8 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
     'avg_male_label_in_mris' : results[18],
     'avg_fraction_of_heatmap_in_male_labels' : results[19],
     'avg_heart_in_mris' : results[20],
-    'avg_fraction_of_heatmap_in_heart' : results[21]
+    'avg_fraction_of_heatmap_in_heart' : results[21],
+    'learning_rate' : results[22]
   }
 
   return trial, search
