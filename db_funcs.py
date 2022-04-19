@@ -24,7 +24,7 @@ def insert_search(search, database_connection_details):
     with conn:
         cursor.execute(f"""INSERT INTO search 
                         ( search_id ,
-                          search_type,
+                          experiment_number,
                           num_models,
                           num_epochs,
                           hyperparam_ranges,
@@ -39,7 +39,7 @@ def insert_search(search, database_connection_details):
                         """, 
                         ( 
                           search['search_id'],
-                          search['search_type'],
+                          search['experiment_number'],
                           search['num_models'],
                           search['num_epochs'],
                           search['hyperparam_ranges'],
@@ -144,7 +144,7 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
   with conn:
       cursor.execute("""SELECT
                           trials_new.search_id,
-                          search_type,
+                          experiment_number,
                           num_models,
                           num_epochs,
                           hyperparam_ranges,
@@ -172,7 +172,7 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
   conn.close()
   search = {
     'search_id' : results[0], 
-    'search_type' : results[1], 
+    'experiment_number' : results[1], 
     'num_models' : results[2], 
     'num_epochs' : results[3], 
     'hyperparam_ranges' : results[4], 
