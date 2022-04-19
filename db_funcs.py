@@ -24,7 +24,7 @@ def insert_search(search, database_connection_details):
     with conn:
         cursor.execute(f"""INSERT INTO search 
                         ( search_id ,
-                          search_type,  #exp1_normal_loss or exp1_gc_loss
+                          search_type,
                           num_models,
                           num_epochs,
                           hyperparam_ranges,
