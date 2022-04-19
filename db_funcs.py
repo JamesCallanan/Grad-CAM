@@ -11,6 +11,13 @@ class Order_By(Enum):
   ASC = 'asc'
   DESC = 'desc'
 
+class Search_Type(Enum):
+  EXP_1_NORMAL_LOSS = 11
+  EXP_1_HEATMAP_LOSS = 12
+  EXP_2_NORMAL_LOSS = 21
+  EXP_2_HEATMAP_LOSS = 22
+  EXP_2_NORMAL_LOSS_NO_LABELS = 23
+
 def insert_search(search, database_connection_details):
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
     cursor = conn.cursor()
