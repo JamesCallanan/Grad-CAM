@@ -117,7 +117,7 @@ def get_all_trials_by_search_id(search_id, database_connection_details):
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
     cursor = conn.cursor()
     with conn:
-        cursor.execute("SELECT * FROM trials_new WHERE search_id='%s'",(search_id,))
+        cursor.execute("SELECT * FROM trials_new WHERE search_id=%s",(search_id,))
         results = cursor.fetchall()
     conn.close()
     return results
