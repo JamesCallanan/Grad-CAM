@@ -11,7 +11,7 @@ class Order_By(Enum):
   ASC = 'asc'
   DESC = 'desc'
 
-class Search_Type(Enum):
+class Experiment_Number(Enum):
   EXP_1_NORMAL_LOSS = 11
   EXP_1_HEATMAP_LOSS = 12
   EXP_2_NORMAL_LOSS = 21
