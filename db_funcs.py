@@ -152,7 +152,11 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
                           val_loss,
                           val_acc,
                           train_loss,
-                          train_acc
+                          train_acc,
+                          avg_male_label_in_mris,
+                          avg_fraction_of_heatmap_in_male_labels,
+                          avg_heart_in_mris,
+                          avg_fraction_of_heatmap_in_heart
                         FROM trials_new
                         INNER JOIN search ON trials_new.search_id = search.search_id
                         WHERE trials_new.trial_uid = %s""", (trial_uid,)
@@ -179,7 +183,11 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
     'val_loss' : results[14],
     'val_acc' : results[15],
     'train_loss' : results[16],
-    'train_acc' : results[17]
+    'train_acc' : results[17],
+    'avg_male_label_in_mris' : results[18],
+    'avg_fraction_of_heatmap_in_male_labels' : results[19],
+    'avg_heart_in_mris' : results[20],
+    'avg_fraction_of_heatmap_in_heart' : results[21]
   }
 
   return trial, search
@@ -207,7 +215,7 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
 #     conn.close()
 
 
-# def get_trial_uids_without_grad_cam_overlap_metrics(database_connection_details):
+# def get_trial_uids_without_heatmap_overlap_metrics(database_connection_details):
 #   conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
 #   cursor = conn.cursor()
 #   with conn:
