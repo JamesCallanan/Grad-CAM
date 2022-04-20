@@ -212,6 +212,22 @@ def get_trial_and_search_data_by_trial_uid(trial_uid, database_connection_detail
 
   return trial, search
 
+def get_trial_uid_and_model_paths_with_no_test_accuracies( experiment_number , database_connection_details ):
+  conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
+  cursor = conn.cursor()
+  with conn:
+    cursor.execute("""
+                      WITH exp1_nor_searches AS (
+                      SELECT search_id FROM search WHERE experiment_number = %s 
+                      AND tensorboard_folder_path != '' 
+                      AND tensorboard_folder_path IS NOT NULL
+                      )
+                      SELECT trial_uid, model_path FROM trials_new WHERE search_id IN (SELECT search_id FROM exp1_nor_searches)
+                      AND test_acc is NULL;
+                  """, (experiment_number,))
+    results = cursor.fetchall()
+  conn.close()
+  return results
 
 # def update_trial_with_heatmap_data(trial_updated, database_connection_details): 
 #     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
