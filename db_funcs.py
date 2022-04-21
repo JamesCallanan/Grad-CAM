@@ -83,6 +83,45 @@ def insert_trial(trial, database_connection_details):
                       )
     conn.close()
 
+def update_trial(trial_uid, performance_metrics, database_connection_details):
+    conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
+    cursor = conn.cursor()
+    with conn:
+        cursor.execute(""" UPDATE trials_new 
+                            SET 
+                              test_acc = %s,
+                              test_gc_loss = %s,
+                              test_cce_loss = %s,
+                              avg_heart_in_mris = %s,
+                              avg_fraction_of_gc_heatmap_in_heart = %s,
+                              avg_fraction_of_hc_heatmap_in_heart = %s,
+                              avg_male_label_in_mris = %s,
+                              avg_fraction_of_gc_heatmap_in_male_labels = %s,
+                              avg_fraction_of_hc_heatmap_in_male_labels = %s,
+                              avg_fat_in_mris = %s,
+                              avg_fraction_of_gc_heatmap_in_fat = %s,
+                              avg_fraction_of_hc_heatmap_in_fat = %s
+                            WHERE 
+                            trial_uid = %s 
+                        """,
+                        ( 
+                            performance_metrics['test_acc'],
+                            performance_metrics['test_gc_loss'],
+                            performance_metrics['test_cce_loss'],
+                            performance_metrics['avg_heart_in_mris'],
+                            performance_metrics['avg_fraction_of_gc_heatmap_in_heart'],
+                            performance_metrics['avg_fraction_of_hc_heatmap_in_heart'],
+                            performance_metrics['avg_male_label_in_mris'],
+                            performance_metrics['avg_fraction_of_gc_heatmap_in_male_labels'],
+                            performance_metrics['avg_fraction_of_hc_heatmap_in_male_labels'],
+                            performance_metrics['avg_fat_in_mris'],
+                            performance_metrics['avg_fraction_of_gc_heatmap_in_fat'],
+                            performance_metrics['avg_fraction_of_hc_heatmap_in_fat']
+                            trial_uid
+                        )
+                      )
+    conn.close()
+                                                        
 
 def get_trial_by_trial_uid(trial_uid, database_connection_details):
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
