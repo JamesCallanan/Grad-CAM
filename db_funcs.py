@@ -87,7 +87,7 @@ def update_trial_with_test_metrics(trial_uid, performance_metrics, database_conn
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
     cursor = conn.cursor()
     with conn:
-        if performance_metrics.has_key('val_loss'): #We probably want to evaluate on train, val and test datasets e.g. for heatmaps loss experiments
+        if 'val_loss' in performance_metrics: #We probably want to evaluate on train, val and test datasets e.g. for heatmaps loss experiments
           cursor.execute(""" UPDATE trials_new 
                               SET 
                                 train_acc = %s,
