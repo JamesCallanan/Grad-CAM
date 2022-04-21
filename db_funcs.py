@@ -83,7 +83,7 @@ def insert_trial(trial, database_connection_details):
                       )
     conn.close()
 
-def update_trial(trial_uid, performance_metrics, database_connection_details):
+def update_trial_with_test_metrics(trial_uid, performance_metrics, database_connection_details):
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
     cursor = conn.cursor()
     with conn:
