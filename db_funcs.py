@@ -116,7 +116,7 @@ def update_trial(trial_uid, performance_metrics, database_connection_details):
                             performance_metrics['avg_fraction_of_hc_heatmap_in_male_labels'],
                             performance_metrics['avg_fat_in_mris'],
                             performance_metrics['avg_fraction_of_gc_heatmap_in_fat'],
-                            performance_metrics['avg_fraction_of_hc_heatmap_in_fat']
+                            performance_metrics['avg_fraction_of_hc_heatmap_in_fat'],
                             trial_uid
                         )
                       )
