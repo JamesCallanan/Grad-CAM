@@ -87,39 +87,82 @@ def update_trial_with_test_metrics(trial_uid, performance_metrics, database_conn
     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
     cursor = conn.cursor()
     with conn:
-        cursor.execute(""" UPDATE trials_new 
-                            SET 
-                              test_acc = %s,
-                              test_gc_loss = %s,
-                              test_cce_loss = %s,
-                              avg_heart_in_mris = %s,
-                              avg_fraction_of_gc_heatmap_in_heart = %s,
-                              avg_fraction_of_hc_heatmap_in_heart = %s,
-                              avg_male_label_in_mris = %s,
-                              avg_fraction_of_gc_heatmap_in_male_labels = %s,
-                              avg_fraction_of_hc_heatmap_in_male_labels = %s,
-                              avg_fat_in_mris = %s,
-                              avg_fraction_of_gc_heatmap_in_fat = %s,
-                              avg_fraction_of_hc_heatmap_in_fat = %s
-                            WHERE 
-                            trial_uid = %s 
-                        """,
-                        ( 
-                            performance_metrics['test_acc'],
-                            performance_metrics['test_gc_loss'],
-                            performance_metrics['test_cce_loss'],
-                            performance_metrics['avg_heart_in_mris'],
-                            performance_metrics['avg_fraction_of_gc_heatmap_in_heart'],
-                            performance_metrics['avg_fraction_of_hc_heatmap_in_heart'],
-                            performance_metrics['avg_male_label_in_mris'],
-                            performance_metrics['avg_fraction_of_gc_heatmap_in_male_labels'],
-                            performance_metrics['avg_fraction_of_hc_heatmap_in_male_labels'],
-                            performance_metrics['avg_fat_in_mris'],
-                            performance_metrics['avg_fraction_of_gc_heatmap_in_fat'],
-                            performance_metrics['avg_fraction_of_hc_heatmap_in_fat'],
-                            trial_uid
+        if performance_metrics.has_key('val_loss'): #We probably want to evaluate on train, val and test datasets e.g. for heatmaps loss experiments
+          cursor.execute(""" UPDATE trials_new 
+                              SET 
+                                train_acc = %s,
+                                train_loss = %s,
+                                val_acc = %s,
+                                val_loss = %s,
+                                test_acc = %s,
+                                test_gc_loss = %s,
+                                test_cce_loss = %s,
+                                avg_heart_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_heart = %s,
+                                avg_fraction_of_hc_heatmap_in_heart = %s,
+                                avg_male_label_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_male_labels = %s,
+                                avg_fraction_of_hc_heatmap_in_male_labels = %s,
+                                avg_fat_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_fat = %s,
+                                avg_fraction_of_hc_heatmap_in_fat = %s
+                              WHERE 
+                              trial_uid = %s 
+                          """,
+                          ( 
+                              performance_metrics['train_acc'],
+                              performance_metrics['train_loss'],
+                              performance_metrics['val_acc'],
+                              performance_metrics['val_loss'],                            
+                              performance_metrics['test_acc'],
+                              performance_metrics['test_gc_loss'],
+                              performance_metrics['test_cce_loss'],
+                              performance_metrics['avg_heart_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_heart'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_heart'],
+                              performance_metrics['avg_male_label_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_male_labels'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_male_labels'],
+                              performance_metrics['avg_fat_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_fat'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_fat'],
+                              trial_uid
+                          )
                         )
-                      )
+        else: #We probably just want to evaluate test dataset related losses e.g. for normal loss experiments
+          cursor.execute(""" UPDATE trials_new 
+                              SET 
+                                test_acc = %s,
+                                test_gc_loss = %s,
+                                test_cce_loss = %s,
+                                avg_heart_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_heart = %s,
+                                avg_fraction_of_hc_heatmap_in_heart = %s,
+                                avg_male_label_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_male_labels = %s,
+                                avg_fraction_of_hc_heatmap_in_male_labels = %s,
+                                avg_fat_in_mris = %s,
+                                avg_fraction_of_gc_heatmap_in_fat = %s,
+                                avg_fraction_of_hc_heatmap_in_fat = %s
+                              WHERE 
+                              trial_uid = %s 
+                          """,
+                          ( 
+                              performance_metrics['test_acc'],
+                              performance_metrics['test_gc_loss'],
+                              performance_metrics['test_cce_loss'],
+                              performance_metrics['avg_heart_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_heart'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_heart'],
+                              performance_metrics['avg_male_label_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_male_labels'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_male_labels'],
+                              performance_metrics['avg_fat_in_mris'],
+                              performance_metrics['avg_fraction_of_gc_heatmap_in_fat'],
+                              performance_metrics['avg_fraction_of_hc_heatmap_in_fat'],
+                              trial_uid
+                          )
+                        )
     conn.close()
                                                         
 
