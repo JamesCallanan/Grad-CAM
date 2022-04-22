@@ -513,9 +513,9 @@ def get_experiment_test_metrics( experiment_number , database_connection_details
                       'avg_HCM_male_label_in_mris' : trial_result[36] ,
                       'avg_HCM_fraction_of_gc_heatmap_in_male_labels' : trial_result[37] ,
                       'avg_HCM_fraction_of_hc_heatmap_in_male_labels' : trial_result[38]
-      }
-      trial_results.append(trial_result_dict)
-    return trial_results
+    }
+    trial_results.append(trial_result_dict)
+  return trial_results
 
 # def update_trial_with_heatmap_data(trial_updated, database_connection_details): 
 #     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
