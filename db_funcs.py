@@ -463,7 +463,8 @@ def get_experiment_test_metrics( experiment_number , database_connection_details
                                 avg_HCM_fraction_of_hc_heatmap_in_fat ,
                                 avg_HCM_male_label_in_mris ,
                                 avg_HCM_fraction_of_gc_heatmap_in_male_labels ,
-                                avg_HCM_fraction_of_hc_heatmap_in_male_labels 
+                                avg_HCM_fraction_of_hc_heatmap_in_male_labels ,
+                                trial_uid
                        FROM trials_new WHERE val_acc > 0.95 
                         AND search_id IN (SELECT search_id FROM search_ids);
                     """, (experiment_number,)
@@ -512,7 +513,8 @@ def get_experiment_test_metrics( experiment_number , database_connection_details
                       'avg_HCM_fraction_of_hc_heatmap_in_fat' : trial_result[35] ,
                       'avg_HCM_male_label_in_mris' : trial_result[36] ,
                       'avg_HCM_fraction_of_gc_heatmap_in_male_labels' : trial_result[37] ,
-                      'avg_HCM_fraction_of_hc_heatmap_in_male_labels' : trial_result[38]
+                      'avg_HCM_fraction_of_hc_heatmap_in_male_labels' : trial_result[38],
+                      'trial_uid' : trial_result[39]
     }
     trial_results.append(trial_result_dict)
   return trial_results
