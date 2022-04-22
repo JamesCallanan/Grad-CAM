@@ -419,6 +419,104 @@ def get_trial_uid_and_model_paths_with_no_test_accuracies( experiment_number , d
   conn.close()
   return results
 
+def get_experiment_test_metrics( experiment_number , database_connection_details ):
+  conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
+  cursor = conn.cursor()
+  with conn:
+    cursor.execute( """WITH search_ids AS (
+                        SELECT search_id FROM search WHERE experiment_number = %s
+                      ) SELECT  test_acc ,
+                                test_gc_loss ,
+                                test_cce_loss ,
+                                avg_NOR_heart_in_mris ,
+                                avg_NOR_fraction_of_gc_heatmap_in_heart ,
+                                avg_NOR_fraction_of_hc_heatmap_in_heart ,
+                                avg_NOR_fat_in_mris ,
+                                avg_NOR_fraction_of_gc_heatmap_in_fat ,
+                                avg_NOR_fraction_of_hc_heatmap_in_fat ,
+                                avg_NOR_male_label_in_mris ,
+                                avg_NOR_fraction_of_gc_heatmap_in_male_labels ,
+                                avg_NOR_fraction_of_hc_heatmap_in_male_labels ,
+                                avg_RV_heart_in_mris ,
+                                avg_RV_fraction_of_gc_heatmap_in_heart ,
+                                avg_RV_fraction_of_hc_heatmap_in_heart ,
+                                avg_RV_fat_in_mris ,
+                                avg_RV_fraction_of_gc_heatmap_in_fat ,
+                                avg_RV_fraction_of_hc_heatmap_in_fat ,
+                                avg_RV_male_label_in_mris ,
+                                avg_RV_fraction_of_gc_heatmap_in_male_labels ,
+                                avg_RV_fraction_of_hc_heatmap_in_male_labels ,
+                                avg_DCM_heart_in_mris ,
+                                avg_DCM_fraction_of_gc_heatmap_in_heart ,
+                                avg_DCM_fraction_of_hc_heatmap_in_heart ,
+                                avg_DCM_fat_in_mris ,
+                                avg_DCM_fraction_of_gc_heatmap_in_fat ,
+                                avg_DCM_fraction_of_hc_heatmap_in_fat ,
+                                avg_DCM_male_label_in_mris ,
+                                avg_DCM_fraction_of_gc_heatmap_in_male_labels ,
+                                avg_DCM_fraction_of_hc_heatmap_in_male_labels ,
+                                avg_HCM_heart_in_mris ,
+                                avg_HCM_fraction_of_gc_heatmap_in_heart ,
+                                avg_HCM_fraction_of_hc_heatmap_in_heart ,
+                                avg_HCM_fat_in_mris ,
+                                avg_HCM_fraction_of_gc_heatmap_in_fat ,
+                                avg_HCM_fraction_of_hc_heatmap_in_fat ,
+                                avg_HCM_male_label_in_mris ,
+                                avg_HCM_fraction_of_gc_heatmap_in_male_labels ,
+                                avg_HCM_fraction_of_hc_heatmap_in_male_labels 
+                       FROM trials_new WHERE val_acc > 0.95 
+                        AND search_id IN (SELECT search_id FROM search_ids);
+                    """, (experiment_number,)
+                  )
+    results = cursor.fetchall()
+  conn.close()
+
+  trial_results = []
+  for trial_result in results:
+    trial_result_dict = {
+                      'test_acc' : trial_result[0] ,
+                      'test_gc_loss' : trial_result[1] ,
+                      'test_cce_loss' : trial_result[2] ,
+                      'avg_NOR_heart_in_mris' : trial_result[3] ,
+                      'avg_NOR_fraction_of_gc_heatmap_in_heart' : trial_result[4] ,
+                      'avg_NOR_fraction_of_hc_heatmap_in_heart' : trial_result[5] ,
+                      'avg_NOR_fat_in_mris' : trial_result[6] ,
+                      'avg_NOR_fraction_of_gc_heatmap_in_fat' : trial_result[7] ,
+                      'avg_NOR_fraction_of_hc_heatmap_in_fat' : trial_result[8] ,
+                      'avg_NOR_male_label_in_mris' : trial_result[9] ,
+                      'avg_NOR_fraction_of_gc_heatmap_in_male_labels' : trial_result[10] ,
+                      'avg_NOR_fraction_of_hc_heatmap_in_male_labels' : trial_result[11] ,
+                      'avg_RV_heart_in_mris' : trial_result[12] ,
+                      'avg_RV_fraction_of_gc_heatmap_in_heart' : trial_result[13] ,
+                      'avg_RV_fraction_of_hc_heatmap_in_heart' : trial_result[14] ,
+                      'avg_RV_fat_in_mris' : trial_result[15] ,
+                      'avg_RV_fraction_of_gc_heatmap_in_fat' : trial_result[16] ,
+                      'avg_RV_fraction_of_hc_heatmap_in_fat' : trial_result[17] ,
+                      'avg_RV_male_label_in_mris' : trial_result[18] ,
+                      'avg_RV_fraction_of_gc_heatmap_in_male_labels' : trial_result[19] ,
+                      'avg_RV_fraction_of_hc_heatmap_in_male_labels' : trial_result[20] ,
+                      'avg_DCM_heart_in_mris' : trial_result[21] ,
+                      'avg_DCM_fraction_of_gc_heatmap_in_heart' : trial_result[22] ,
+                      'avg_DCM_fraction_of_hc_heatmap_in_heart' : trial_result[23] ,
+                      'avg_DCM_fat_in_mris' : trial_result[24] ,
+                      'avg_DCM_fraction_of_gc_heatmap_in_fat' : trial_result[25] ,
+                      'avg_DCM_fraction_of_hc_heatmap_in_fat' : trial_result[26] ,
+                      'avg_DCM_male_label_in_mris' : trial_result[27] ,
+                      'avg_DCM_fraction_of_gc_heatmap_in_male_labels' : trial_result[28] ,
+                      'avg_DCM_fraction_of_hc_heatmap_in_male_labels' : trial_result[29] ,
+                      'avg_HCM_heart_in_mris' : trial_result[30] ,
+                      'avg_HCM_fraction_of_gc_heatmap_in_heart' : trial_result[31] ,
+                      'avg_HCM_fraction_of_hc_heatmap_in_heart' : trial_result[32] ,
+                      'avg_HCM_fat_in_mris' : trial_result[33] ,
+                      'avg_HCM_fraction_of_gc_heatmap_in_fat' : trial_result[34] ,
+                      'avg_HCM_fraction_of_hc_heatmap_in_fat' : trial_result[35] ,
+                      'avg_HCM_male_label_in_mris' : trial_result[36] ,
+                      'avg_HCM_fraction_of_gc_heatmap_in_male_labels' : trial_result[37] ,
+                      'avg_HCM_fraction_of_hc_heatmap_in_male_labels' : trial_result[38]
+    }
+    trial_results.append(trial_result_dict)
+    return trial_results
+
 # def update_trial_with_heatmap_data(trial_updated, database_connection_details): 
 #     conn = psycopg2.connect(database="postgres", user = database_connection_details['user'], host = database_connection_details['ngrok_host'] , port = database_connection_details['ngrok_port'])
 #     cursor = conn.cursor()
