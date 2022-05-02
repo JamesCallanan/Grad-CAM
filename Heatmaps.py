@@ -70,3 +70,30 @@ def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
     superimposed_img = superimposed_img.astype(int)
     plt.imshow(superimposed_img)
     plt.show()
+    
+ def return_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
+    if np.mean(mri) < 0:
+        print('Mean of image was < 0 . Are you sure that you are passing in unprocessed images!! Preproccessing applied for network is not good for network visualisations')
+
+    if len(mri.shape) != 3:
+      return 'Incorrect length mri'
+    mri = (255*(mri/np.amax(mri)))
+    # Rescale heatmap to a range 0-255
+    heatmap = np.uint8(255 * heatmap)
+
+    # Should consider another colour map according to Kathleen?
+    jet = cm.get_cmap("jet")
+
+    # Use RGB values of the colormap
+    jet_colors = jet(np.arange(256))[:, :3]
+    jet_heatmap = jet_colors[heatmap]
+
+    # Create an image with RGB colorized heatmap
+    jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
+
+    jet_heatmap = jet_heatmap.resize((mri.shape[1], mri.shape[0]))
+    jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
+
+    # Superimpose the heatmap on original image
+    superimposed_img = jet_heatmap*alpha +  mri*beta
+    return superimposed_img.astype(int)
