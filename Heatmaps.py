@@ -97,7 +97,7 @@ def return_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5, heatmap_loss_demo=
     # Superimpose the heatmap on original image
     superimposed_img = jet_heatmap*alpha +  mri*beta
     if heatmap_loss_demo:
-        return [superimposed_img.astype(int), jet_heatmap]
+        return [superimposed_img.astype(int), jet_heatmap.astype(int)]
     
     else:
         return superimposed_img.astype(int)
