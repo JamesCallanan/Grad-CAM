@@ -71,7 +71,7 @@ def display_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
     plt.imshow(superimposed_img)
     plt.show()
     
-def return_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
+def return_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5, heatmap_loss_demo=False):
     if np.mean(mri) < 0:
         print('Mean of image was < 0 . Are you sure that you are passing in unprocessed images!! Preproccessing applied for network is not good for network visualisations')
 
@@ -96,4 +96,8 @@ def return_gradcam_heatmap(mri, heatmap, alpha=0.5, beta=0.5):
 
     # Superimpose the heatmap on original image
     superimposed_img = jet_heatmap*alpha +  mri*beta
-    return superimposed_img.astype(int)
+    if heatmap_loss_demo:
+        return [superimposed_img.astype(int), jet_heatmap]
+    
+    else:
+        return superimposed_img.astype(int)
