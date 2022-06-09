@@ -1,4 +1,4 @@
-Code for thesis and short MIDL paper submission, both entitled 'Integrating feature attribution methods into the loss function of deep learning classifiers'.
+Code for thesis and short [paper](https://jamescallanan.github.io/assets/ShortPaper.pdf), both entitled 'Integrating feature attribution methods into the loss function of deep learning classifiers'.
 
 Unfortunately, many of these notebooks cannot be re-run without setting up a database that contains the same tables as mine does. The database containing data from my experiments is on my local machine. Thus, without ngrok set up, no one can query/insert into it.
 
