@@ -34,5 +34,5 @@ This contains the implementation of the statistical tests for the thesis/paper. 
 Contains data collected after performing experiments and computing performance metrics. This could be loaded into a local Postgres database. You could expose this database using ngrok if running 'Results/Tests_and_Plots.ipynb' on Google Colab as opposed to locally.
 
 
-#Experiment 1/CCE loss.ipynb , #Experiment 1/Heatmap loss.ipynb, #Experiment 2/CCE loss.ipynb , #Experiment 2/Heatmap loss.ipynb
+# Experiment 1/CCE loss.ipynb , Experiment 1/Heatmap loss.ipynb, Experiment 2/CCE loss.ipynb , Experiment 2/Heatmap loss.ipynb
 These were the notebooks run to train models for the respective experiments using the different loss functions. These notebooks had to be repetitively run. I believe the Colab notebooks where running into OOM errors with larger numbers of models trained. If replicating the experiment, you would not need to train so many models. 30 models was excessive as the effect size was so large. I recall n = 3 to 5 (3-5 models) being sufficient given the observed effect size, a high power and low alpha level (0.01). This would need to be verified though. I used pinguoin.power_ttest() to do this at the time.
