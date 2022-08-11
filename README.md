@@ -1,4 +1,4 @@
-Code for thesis and short [paper](https://jamescallanan.github.io/assets/ShortPaper.pdf), both entitled 'Integrating feature attribution methods into the loss function of deep learning classifiers'.
+Code for [thesis](https://jamescallanan.github.io/assets/thesis.pdf) and short [paper](https://jamescallanan.github.io/assets/ShortPaper.pdf), both entitled 'Integrating feature attribution methods into the loss function of deep learning classifiers'.
 
 Below is a description of a selection of files in this repo:
 
