@@ -16,5 +16,8 @@ This contains the implementation of the statistical tests for the thesis/paper. 
 # Heatmap_images.ipynb
 This shows how the HiResCAM heatmaps that are overlayed on the cardiac MRIs, were produced.
 
+#Heatmaps.py
+The function make_gradcam_heatmap() returns both a GradCAM and HiResCAM heatmap. Inspiration for implementation came from https://keras.io/examples/vision/grad_cam/ 
+
 # db_funcs.py
 Contains functions that were used to insert into or pull data from the DB on my local machine when running above code in Google Colab instances.
